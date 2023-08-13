@@ -4,11 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat</title>
-    <link rel="stylesheet" type="text/css" href="main.css" />
-    <script src="socket.io/socket.io.js"></script>
-    <script src="jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://chat-p4n2.onrender.com/main.css" />
+    <script src="https://chat-p4n2.onrender.com/socket.io/socket.io.js"></script>
+    <script src="https://chat-p4n2.onrender.com/jquery.js"></script>
     <script>
-      var socket = io('http://localhost:3000');
+      var socket = io('https://chat-p4n2.onrender.com');
       socket.on('server-send-dktb', function (data) {
         alert(data + ' đã có người dùng!!!');
       });
