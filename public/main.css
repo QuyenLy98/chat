@@ -1,0 +1,74 @@
+body {
+  background-color: rgb(228, 221, 221);
+}
+#wrapper {
+  width: 600px;
+  margin: auto;
+}
+
+#left,
+#right {
+  min-height: 500px;
+  float: left;
+  margin-top: 10px;
+}
+#clear {
+  width: 100%;
+  clear: both;
+}
+
+#left {
+  width: 30%;
+  background-color: rgb(239, 236, 100);
+}
+#right {
+  width: 70%;
+  background-color: rgb(182, 215, 244);
+}
+
+#txtMessage,
+#btnMessage {
+  float: left;
+  margin-left: 5px;
+}
+
+#txtMessage {
+  width: 70%;
+}
+#btnMessage {
+  width: 25%;
+}
+
+#tieude {
+  background-color: rgb(37, 241, 88);
+  padding: 5px;
+  text-align: center;
+}
+h1 {
+  text-align: center;
+}
+
+#hoten {
+  font-weight: bold;
+  color: red;
+}
+
+.hang {
+  padding: 5px;
+}
+#message {
+  height: 480px;
+  overflow-y: auto;
+}
+
+#ds {
+  padding: 5px;
+}
+
+#sayHi {
+  text-align: end;
+  float: right;
+}
+#currentUser {
+  color: green;
+}

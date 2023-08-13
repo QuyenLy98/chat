@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat</title>
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <script src="socket.io/socket.io.js"></script>
+    <script src="jquery.js"></script>
+    <script>
+      var socket = io('http://localhost:3000');
+      socket.on('server-send-dktb', function (data) {
+        alert(data + ' đã có người dùng!!!');
+      });
+
+      socket.on('server-send-dktc', function (data) {
+        $('#ds').append(
+          '<div socketid="' +
+            data.id +
+            '" class="useronline">' +
+            data.username +
+            '</div>'
+        );
+      });
+
+      socket.on('server-send-hidedk', function (data) {
+        //hide form đăng kí user
+        $('#txtUser').hide();
+        $('#btndangki').hide(1000);
+        $('#txtMessage').show(2000);
+        $('#btnMessage').show(2000);
+        $(`div[socketid="${data[0]}"]`).attr(
+          'style',
+          'color:green;font-weight:bold;font-size:30px;'
+        );
+        $('#sayHi').show(1000);
+        $('#currentUser').html(data[1]);
+      });
+
+      socket.on('server-send-message', function (data) {
+        $('#message').append(
+          `<div class='hang'><span id='hoten'>${data[0]}</span>: ${data[1]}<div>`
+        );
+        $('#message').scrollTop($('#message')[0].scrollHeight);
+      });
+
+      socket.on('server-send-message-my', function (data) {
+        $('#message').append(
+          `<div class='hang' style='float:right;'>${data}</div>
+            <div style='clear:both;'></div>`
+        );
+        $('#message').scrollTop($('#message')[0].scrollHeight);
+      });
+
+      socket.on('server-to-userkhac', function (data) {
+        //alert(`${data} đang chọc bạn !`);
+      });
+
+      socket.on('server-logout', function () {
+        $('#sayHi').hide(1000);
+        $('#txtMessage').hide(1000);
+        $('#btnMessage').hide(1000);
+        $('#txtUser').show(1000);
+        $('#btndangki').show(1000);
+      });
+
+      socket.on('thongbao', function (data) {
+        $(`div[socketid='${data}']`).remove();
+      });
+
+      socket.on('server-users-online', function (data) {
+        data.map((da) => {
+          $('#ds').append('<div class="useronline">' + da + '</div>');
+        });
+      });
+
+      socket.on('server-send-aido', function (data) {
+        $('#status').html(
+          '<div>' +
+            "<img width='20px' src='message.gif' />" +
+            data +
+            ' đang gõ...</div>'
+        );
+      });
+      socket.on('server-send-out-aido', function () {
+        $('#status').html('');
+      });
+
+      $(document).ready(function () {
+        $('#txtMessage').hide();
+        $('#btnMessage').hide();
+        $('#sayHi').hide();
+
+        socket.emit('client-users-online');
+
+        $('#btndangki').click(function () {
+          socket.emit('client-send-user', $('#txtUser').val());
+        });
+
+        $('#btnMessage').click(function () {
+          socket.emit('client-send-message', $('#txtMessage').val());
+          $('#txtMessage').val('');
+        });
+
+        $(document).on('click', '.useronline', function () {
+          var id = $(this).attr('socketid');
+          socket.emit('user-choc-userkhac', id);
+        });
+
+        $('#btnLogout').click(function () {
+          socket.emit('client-logout');
+        });
+
+        $('#txtMessage').focusin(function () {
+          socket.emit('client-go-message');
+        });
+
+        $('#txtMessage').focusout(function () {
+          socket.emit('client-out-message');
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="wrapper">
+      <h1>CHAT APP</h1>
+      <input type="text" id="txtUser" placeholder="Username" />
+      <input type="button" id="btndangki" value="Đăng kí" />
+      <div id="clear"></div>
+      <div id="sayHi">
+        Hello <span id="currentUser"></span>,
+        <input type="button" value="Thoát" id="btnLogout" />
+      </div>
+      <div id="clear"></div>
+      <div id="left">
+        <div id="tieude">Người Online</div>
+        <div id="ds"></div>
+      </div>
+
+      <div id="right">
+        <div id="message"></div>
+        <div id="clear"></div>
+        <div id="status"></div>
+        <input type="text" id="txtMessage" placeholder="Message..." />
+        <input type="button" id="btnMessage" value="Chat" />
+      </div>
+    </div>
+  </body>
+</html>
